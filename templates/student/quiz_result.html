@@ -1,0 +1,53 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style>
+    .option {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+
+<div class="container mt-4">
+  <h2>Your Score: {{ score }} / {{ total }}</h2>
+  <hr>
+  {% for result in detailedResults %}
+  <div class="mb-3">
+    <h5>{{ result.question }}</h5>
+    {% for key, option in result.options.items %}
+    <div class="option
+      {% if key == result.correctOption %}
+        correct
+      {% elif key == result.selectedOption %}
+        incorrect
+      {% endif %}
+    ">
+      <strong>{{ key }}.</strong> {{ option }}
+      {% if key == result.correctOption %}
+        (Correct Answer)
+      {% elif key == result.selectedOption %}
+        (Your Answer)
+      {% endif %}
+    </div>
+    {% endfor %}
+    <p><strong>Correct Answer: </strong> {{ result.correctAnswerText }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

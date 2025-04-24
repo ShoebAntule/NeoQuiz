@@ -1,0 +1,19 @@
+{% extends 'quiz/adminbase.html' %}
+{% block content %}
+<div class="container">
+    <h2>Approve Teacher</h2>
+    <form method="post">
+        {% csrf_token %}
+<div class="form-group">
+    <label for="subject">Subject:</label>
+    <select class="form-control" id="subject" name="subject" required>
+        <option value="" disabled {% if not selected_subject %}selected{% endif %}>Select a subject</option>
+        {% for subject in subjects %}
+            <option value="{{ subject }}" {% if subject == selected_subject %}selected{% endif %}>{{ subject }}</option>
+        {% endfor %}
+    </select>
+</div>
+        <button type="submit" class="btn btn-primary">Approve Teacher</button>
+    </form>
+</div>
+{% endblock content %}

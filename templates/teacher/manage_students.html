@@ -1,0 +1,126 @@
+{% extends 'teacher/teacherbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container">
+    <h2>Student Management</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Active Students</h4>
+                </div>
+                <div class="card-body">
+                    {% if active_students %}
+                        <ul class="list-group">
+                            {% for student in active_students %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ student.get_name }}
+                                <button class="btn btn-danger btn-sm block-btn" 
+                                        data-student-id="{{ student.id }}">
+                                    Block
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No active students</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h4>Blocked Students</h4>
+                </div>
+                <div class="card-body">
+                    {% if blocked_students %}
+                        <ul class="list-group">
+                            {% for student in blocked_students %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ student.get_name }}
+                                <button class="btn btn-success btn-sm unblock-btn" 
+                                        data-student-id="{{ student.id }}">
+                                    Unblock
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No blocked students</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    
+        const csrftoken = getCookie('csrftoken');
+    
+        $('.block-btn').click(function() {
+            const studentId = $(this).data('student-id');
+            if(confirm('Are you sure you want to block this student?')) {
+                $.ajax({
+                    url: '/teacher/manage-student/' + studentId + '/',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function(response) {
+                        if(response.status === 'success') {
+                            alert(response.message);
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + (xhr.responseJSON?.message || 'Operation failed'));
+                    }
+                });
+            }
+        });
+    
+        $('.unblock-btn').click(function() {
+            const studentId = $(this).data('student-id');
+            if(confirm('Are you sure you want to unblock this student?')) {
+                $.ajax({
+                    url: '/teacher/manage-student/' + studentId + '/',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function(response) {
+                        if(response.status === 'success') {
+                            alert(response.message);
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + (xhr.responseJSON?.message || 'Operation failed'));
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

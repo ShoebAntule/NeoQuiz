@@ -1,0 +1,158 @@
+/* Layout Styles for Sidebar, Header, and Content */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--light);
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  width: 250px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  z-index: 1030;
+}
+
+.sidebar .profile_image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.sidebar-link {
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-link:hover {
+  background-color: var(--primary);
+  color: white !important;
+  text-decoration: none;
+}
+
+.content {
+  transition: margin-left 0.3s ease;
+}
+
+#sidebarToggle:checked ~ .sidebar {
+  width: 80px;
+}
+
+#sidebarToggle:checked ~ .content {
+  margin-left: 80px !important;
+}
+
+#sidebarToggle:checked + header label {
+  color: var(--primary);
+}
+
+header .left_area h3 {
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.right_area a.btn {
+  font-weight: 600;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    width: 200px;
+    left: -200px;
+    top: 0;
+    height: 100vh;
+    transition: left 0.3s ease;
+  }
+
+  #sidebarToggle:checked ~ .sidebar {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 0 !important;
+  }
+
+  #sidebarToggle:checked ~ .content {
+    margin-left: 200px !important;
+  }
+}
+
+/* Student Dashboard Card Styles and Animations */
+
+.order-card {
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+  margin-bottom: 30px;
+}
+
+.order-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+}
+
+.bg-c-blue {
+  background: linear-gradient(45deg, #1e3c72, #2a5298);
+}
+
+.bg-c-green {
+  background: linear-gradient(45deg, #11998e, #38ef7d);
+}
+
+.bg-c-yellow {
+  background: linear-gradient(45deg, #f7971e, #ffd200);
+}
+
+.bg-c-pink {
+  background: linear-gradient(45deg, #e43a15, #e65245);
+}
+
+.card-block {
+  padding: 25px;
+}
+
+.order-card i {
+  font-size: 40px;
+  animation: pulse 2s infinite;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
+.f-left {
+  float: left;
+}
+
+.f-right {
+  float: right;
+}
+
+/* Animations */
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}

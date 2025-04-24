@@ -1,0 +1,65 @@
+/* Global Styles */
+:root {
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #17a2b8;
+  --light: #f8f9fa;
+  --dark: #343a40;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Button Styles */
+.btn {
+  border-radius: 5px;
+  padding: 8px 20px;
+  font-weight: 500;
+}
+
+/* Form Styles */
+.form-control {
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+/* Navbar Styles */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Dashboard Card Colors */
+.bg-c-blue {
+  background: linear-gradient(45deg, #007bff, #00b4ff);
+}
+
+.bg-c-green {
+  background: linear-gradient(45deg, #28a745, #5cb85c);
+}
+
+.bg-c-yellow {
+  background: linear-gradient(45deg, #ffc107, #ff9800);
+}
+
+.bg-c-pink {
+  background: linear-gradient(45deg, #e83e8c, #dc3545);
+}

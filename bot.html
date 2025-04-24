@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MCQ Generator</title>
+  <style>
+    #mcqs {
+      margin-top: 20px;
+      border: 1px solid #333;
+      padding: 15px;
+      border-radius: 4px;
+      max-width: 800px;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      font-family: monospace;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .question {
+      color: #4ec9b0;
+      margin-bottom: 8px;
+    }
+    .option {
+      color: #dcdcaa;
+      margin-left: 20px;
+    }
+    .answer {
+      color: #569cd6;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="askTeacher()">🎓 Generate Questions</button>
+  <button onclick="showTerminal()">🖥️ Show Terminal</button>
+  <div id="mcqs"></div>
+
+  <script>
+    async function askTeacher() {
+      const subject = prompt("Enter topic (e.g., CN, DBMS):");
+      if (!subject) return;
+
+      const mcqsBox = document.getElementById("mcqs");
+      mcqsBox.innerText = "Generating...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:5500/generate_mcqs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subject }),
+        });
+
+        const data = await res.json();
+        const formattedMCQs = formatMCQs(data.mcqs);
+        mcqsBox.innerHTML = formattedMCQs;
+      } catch (err) {
+        console.error("Error:", err);
+        mcqsBox.innerText = `Error generating questions: ${err.message}`;
+      }
+    }
+    function formatMCQs(text) {
+      const lines = text.split('\n');
+      let html = '';
+      
+      lines.forEach(line => {
+        if (line.startsWith('Q')) {
+          html += `<div class="question">${line}</div>`;
+        } else if (line.match(/^[a-d]\)/)) {
+          html += `<div class="option">${line}</div>`;
+        } else if (line.startsWith('Answer:')) {
+          html += `<div class="answer">${line}</div><br>`;
+        } else if (line.trim()) {
+          html += `<div>${line}</div>`;
+        }
+      });
+      
+      return html;
+    }
+
+    function showTerminal() {
+      const mcqsBox = document.getElementById("mcqs");
+      mcqsBox.innerText = "Loading terminal output...";
+      
+      fetch("http://127.0.0.1:5500/get_terminal_output")
+        .then(res => res.text())
+        .then(text => {
+          mcqsBox.innerHTML = `<pre>${text}</pre>`;
+        })
+        .catch(err => {
+          mcqsBox.innerText = `Error loading terminal output: ${err.message}`;
+        });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+{% extends 'teacher/teacherbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/css">
+      a:link { text-decoration: none; }
+      .order-card { color: rgb(255, 255, 255); }
+      .bg-c-blue { background: #04868f; }
+      .bg-c-green { background:#4C51BF; }
+      .bg-c-yellow { background: #F56565; }
+      .bg-c-pink { background: #663a30; }
+      .card {
+        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        border: 1px solid black;
+        margin-bottom: 30px;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+      }
+      .card .card-block { padding: 25px; }
+      .order-card i { font-size: 26px; }
+      .f-left { float: left; }
+      .f-right { float: right; }
+      header { left: 0px; right: 0px; }
+      .student-list { margin-top: 20px; }
+      .student-card { margin-bottom: 10px; }
+    </style>
+</head>
+<br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-xl-4">
+            <div class="card bg-c-green order-card">
+              <div class="card-block">
+                <h6 class="m-b-20">Total Student</h6>
+                <h2 class="text-right"><i class="fas fa-user-graduate f-left"></i><span>{{total_student}}</span></h2>
+              </div>
+            </div>
+        </div>
+  
+        <div class="col-md-4 col-xl-4">
+            <div class="card bg-c-yellow order-card">
+              <div class="card-block">
+                <h6 class="m-b-20">Total Exams</h6>
+                <h2 class="text-right"><i class="fas fa-book f-left"></i><span>{{total_course}}</span></h2>
+              </div>
+            </div>
+        </div>
+  
+        <div class="col-md-4 col-xl-4">
+            <div class="card bg-c-pink order-card">
+              <div class="card-block">
+                <h6 class="m-b-20">Total Questions</h6>
+                <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row student-list">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-c-blue text-white">
+                    <h5>Active Students</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_students %}
+                        {% for student in active_students %}
+                        <div class="student-card d-flex justify-content-between align-items-center">
+                            <span>{{ student.get_name }}</span>
+                            <button class="btn btn-sm btn-danger block-btn" data-student-id="{{ student.id }}">
+                                Block
+                            </button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No active students</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-c-yellow text-white">
+                    <h5>Blocked Students</h5>
+                </div>
+                <div class="card-body">
+                    {% if blocked_students %}
+                        {% for student in blocked_students %}
+                        <div class="student-card d-flex justify-content-between align-items-center">
+                            <span>{{ student.get_name }}</span>
+                            <button class="btn btn-sm btn-success unblock-btn" data-student-id="{{ student.id }}">
+                                Unblock
+                            </button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No blocked students</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'manage-students' %}" class="btn btn-primary">
+            <i class="fas fa-users-cog"></i> Manage Students
+        </a>
+    </div>
+</div>
+
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Handle block student action
+    $('.block-btn').click(function() {
+        const studentId = $(this).data('student-id');
+        const button = $(this);
+        
+        $.ajax({
+            url: '/teacher/manage-student/' + studentId + '/',
+            method: 'POST',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+            success: function(response) {
+                if(response.status === 'success') {
+                    button.closest('.student-card').remove();
+                    // You could also refresh the lists or move the card to blocked section
+                    location.reload(); // Simple refresh for demo
+                }
+            }
+        });
+    });
+
+    // Handle unblock student action
+    $('.unblock-btn').click(function() {
+        const studentId = $(this).data('student-id');
+        const button = $(this);
+        
+        $.ajax({
+            url: '/teacher/manage-student/' + studentId + '/',
+            method: 'POST',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+            success: function(response) {
+                if(response.status === 'success') {
+                    button.closest('.student-card').remove();
+                    // You could also refresh the lists or move the card to active section
+                    location.reload(); // Simple refresh for demo
+                }
+            }
+        });
+    });
+});
+</script>
+
+{% endblock content %}

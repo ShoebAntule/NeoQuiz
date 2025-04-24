@@ -1,0 +1,29 @@
+{% extends 'quiz/adminbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container">
+    <h2>Approved Teachers and Their Subjects</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Subject</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.get_name }}</td>
+                <td>{{ teacher.mobile }}</td>
+                <td>{{ teacher.subject }}</td>
+                <td>{{ teacher.status|yesno:"Approved,Pending" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

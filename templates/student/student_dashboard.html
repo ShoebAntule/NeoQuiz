@@ -1,0 +1,90 @@
+{% extends 'student/studentbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-xl-3">
+      <a href="/student/student-exam" class="text-decoration-none">
+        <div class="card bg-c-yellow order-card">
+          <div class="card-block d-flex align-items-center">
+            <i class="fas fa-book f-left"></i>
+            <h6 class="m-b-20 ms-3">Total Exams Available</h6>
+            <h2 class="text-right ms-auto"><span>{{total_course}}</span></h2>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <a href="/student/student-exam" class="text-decoration-none">
+        <div class="card bg-c-pink order-card">
+          <div class="card-block d-flex align-items-center">
+            <i class="fas fa-question-circle f-left"></i>
+            <h6 class="m-b-20 ms-3">Total Questions</h6>
+            <h2 class="text-right ms-auto"><span>{{total_question}}</span></h2>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      {% if recent_quiz %}
+      <a href="/student/take-exam/{{ recent_quiz.id }}" class="text-decoration-none">
+        <div class="card bg-c-green order-card">
+          <div class="card-block d-flex align-items-center">
+            <i class="fas fa-clock f-left"></i>
+            <h6 class="m-b-20 ms-3">Recent Quiz</h6>
+            <h5 class="text-right ms-auto"><span>{{ recent_quiz.course_name }}</span></h5>
+          </div>
+        </div>
+      </a>
+      {% else %}
+      <div class="card bg-c-green order-card">
+        <div class="card-block d-flex align-items-center">
+          <i class="fas fa-clock f-left"></i>
+          <h6 class="m-b-20 ms-3">Recent Quiz</h6>
+          <h5 class="text-right ms-auto"><span>No quizzes available</span></h5>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 col-xl-3">
+      {% if last_attempted_result %}
+      <a href="/student/check-marks/{{ last_attempted_result.exam.id }}" class="text-decoration-none">
+        <div class="card bg-c-blue order-card">
+          <div class="card-block d-flex align-items-center">
+            <i class="fas fa-history f-left"></i>
+            <h6 class="m-b-20 ms-3">Last Attempted Quiz</h6>
+            <h5 class="text-right ms-auto"><span>{{ last_attempted_result.exam.course_name }}</span></h5>
+            <h6 class="text-right ms-auto"><span>{{ last_attempted_result.exam.subject }}</span></h6>
+          </div>
+        </div>
+      {% else %}
+      <div class="card bg-c-blue order-card">
+        <div class="card-block d-flex align-items-center">
+          <i class="fas fa-history f-left"></i>
+          <h6 class="m-b-20 ms-3">Last Attempted Quiz</h6>
+          <h5 class="text-right ms-auto"><span>No attempts yet</span></h5>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <a href="/student-marks" class="text-decoration-none">
+        <div class="card bg-c-purple order-card">
+          <div class="card-block d-flex align-items-center">
+            <i class="fas fa-chart-line f-left"></i>
+            <h6 class="m-b-20 ms-3">Check Your Progress</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
